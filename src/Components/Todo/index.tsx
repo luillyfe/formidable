@@ -1,4 +1,6 @@
-export default function Todo() {
+import { Task } from "../../data/todo";
+
+export default function Todo({ title, description }: Task) {
   return (
     <div className="group relative flex gap-x-6 rounded-lg p-4 hover:bg-gray-50">
       <div className="mt-1 flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
@@ -19,9 +21,10 @@ export default function Todo() {
       </div>
       <div>
         <a href="#" className="font-semibold text-gray-900">
-          Task 1<span className="absolute inset-0"></span>
+          {title}
+          <span className="absolute inset-0"></span>
         </a>
-        <p className="mt-1 text-gray-600">Speak directly to your customers</p>
+        <p className="mt-1 text-gray-600">{description}</p>
       </div>
     </div>
   );

@@ -1,3 +1,5 @@
+import ListTodos from "../Components/ListTodos";
+
 export default function HomePage() {
   return (
     <div className="bg-white">
@@ -16,7 +18,8 @@ export default function HomePage() {
           ></div>
         </div>
         {/* Section 2 */}
-        <div className="mx-auto max-w-2xl pt-32 sm:pt-48 lg:pt-56 text-center">
+        {/* pt-32 sm:pt-48 lg:pt-56 */}
+        <div className="mx-auto max-w-2xl pt-0 sm:pt-0 lg:pt-0 text-center">
           <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
             Todo App
           </h1>
@@ -37,6 +40,7 @@ export default function HomePage() {
             </div>
           </form>
         </div>
+        <ListTodos />
         {/* Section 3 */}
         <div
           className="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]"
