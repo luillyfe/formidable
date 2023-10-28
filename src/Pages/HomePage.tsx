@@ -16,7 +16,7 @@ export default function HomePage() {
           ></div>
         </div>
         {/* Section 2 */}
-        <div className="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56 text-center">
+        <div className="mx-auto max-w-2xl pt-32 sm:pt-48 lg:pt-56 text-center">
           <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
             Todo App
           </h1>
