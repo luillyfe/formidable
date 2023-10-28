@@ -1,4 +1,4 @@
-export default function index() {
+export default function TodoOptions() {
   return (
     <>
       <div className="grid grid-cols-2 divide-x divide-gray-900/5 bg-gray-50">
@@ -18,7 +18,7 @@ export default function index() {
               clipRule="evenodd"
             />
           </svg>
-          Watch demo
+          Option 1
         </a>
         <a
           href="#"
@@ -36,7 +36,7 @@ export default function index() {
               clipRule="evenodd"
             />
           </svg>
-          Contact sales
+          Option 2
         </a>
       </div>
     </>
