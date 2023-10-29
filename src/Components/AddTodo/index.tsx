@@ -1,6 +1,23 @@
+import { ChangeEvent, FormEvent, useState } from "react";
+
 export default function AddTodo() {
+  const [state, setState] = useState({ title: "", description: "" });
+
+  function handleChange(
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) {
+    const value = event.target.value;
+    const name = event.target.name;
+
+    setState({ ...state, [name]: value });
+  }
+
+  function handleSubmit(event: FormEvent) {
+    event.preventDefault();
+  }
+
   return (
-    <form className="w-full max-w-lg">
+    <form className="w-full max-w-lg" onSubmit={handleSubmit}>
       <div className="flex flex-wrap -mx-3 mb-6">
         <div className="w-1/2 md:w-full px-3 mb-6 md:mb-0">
           <label
@@ -14,6 +31,9 @@ export default function AddTodo() {
             id="title"
             type="text"
             placeholder="Todo Title"
+            name="title"
+            value={state.title}
+            onChange={handleChange}
           />
           <p className="text-red-500 text-xs italic">
             Please fill out the todo title.
@@ -33,6 +53,9 @@ export default function AddTodo() {
             rows={4}
             className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 focus:bg-white"
             placeholder="Write your description here..."
+            name="description"
+            value={state.description}
+            onChange={handleChange}
           ></textarea>
 
           <p className="text-gray-600 text-xs italic">
@@ -47,9 +70,11 @@ export default function AddTodo() {
           </button>
         </div>
         <div className="w-1/2 px-3 mb-6 md:mb-0">
-          <button className="w-full py-1 px-2 flex-shrink-0 bg-indigo-500 hover:bg-indigo-500 border-indigo-500 hover:border-indigo-700 text-sm border-4 text-white font-semibold rounded-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-            Add
-          </button>
+          <input
+            className="w-full py-1 px-2 flex-shrink-0 bg-indigo-500 hover:bg-indigo-500 border-indigo-500 hover:border-indigo-700 text-sm border-4 text-white font-semibold rounded-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            value="Add"
+            type="submit"
+          ></input>
         </div>
       </div>
     </form>
