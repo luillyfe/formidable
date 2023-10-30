@@ -1,11 +1,11 @@
 import { useState } from "react";
 
-import tasks from "../../data/tasks.json";
-
+import { Task } from "../../data/todo";
 import Todo from "../Todo";
 
-export default function ListTodos() {
-  const [todos] = useState(tasks);
+export default function ListTodos({ todos: loadedTodos }: { todos: Task[] }) {
+  const [todos] = useState(loadedTodos);
+
   return (
     <div className="relative">
       <div className="absolute left-1/2 z-10 mt-5 flex w-screen max-w-max -translate-x-1/2 px-4">
