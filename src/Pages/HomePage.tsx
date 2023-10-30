@@ -1,6 +1,11 @@
+import { useLoaderData } from "react-router-dom";
+
 import ListTodos from "../Components/ListTodos";
+import { Task } from "../data/todo";
 
 export default function HomePage() {
+  const { todos } = useLoaderData() as { todos: Task[] };
+
   return (
     <>
       {/* pt-32 sm:pt-48 lg:pt-56 */}
@@ -25,7 +30,7 @@ export default function HomePage() {
           </div>
         </form>
       </div>
-      <ListTodos />
+      <ListTodos todos={todos} />
     </>
   );
 }
