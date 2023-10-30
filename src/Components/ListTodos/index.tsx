@@ -1,10 +1,18 @@
-import { useState } from "react";
+import { useState, MouseEvent } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { Task } from "../../data/todo";
 import Todo from "../Todo";
 
 export default function ListTodos({ todos: loadedTodos }: { todos: Task[] }) {
   const [todos] = useState(loadedTodos);
+
+  const navigate = useNavigate();
+
+  function handleClick(event: MouseEvent<HTMLButtonElement>) {
+    event.stopPropagation();
+    navigate("/todos/new");
+  }
 
   return (
     <div className="relative">
@@ -19,6 +27,15 @@ export default function ListTodos({ todos: loadedTodos }: { todos: Task[] }) {
               />
             ))}
           </div>
+        </div>
+        <div className="h-10 transform -rotate-90 mt-3">
+          <button
+            className="flex-shrink-0 bg-indigo-500 hover:bg-indigo-500 border-indigo-500 hover:border-indigo-700 text-sm border-4 text-white font-semibold py-1 px-2 rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            type="button"
+            onClick={handleClick}
+          >
+            New
+          </button>
         </div>
       </div>
     </div>
