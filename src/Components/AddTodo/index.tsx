@@ -1,6 +1,9 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useContext, useEffect, useState } from "react";
+import { StoreContext } from "../../Store";
 
 export default function AddTodo() {
+  const { store, dispatch } = useContext(StoreContext);
+
   const [state, setState] = useState({ title: "", description: "" });
 
   function handleChange(
@@ -14,7 +17,19 @@ export default function AddTodo() {
 
   function handleSubmit(event: FormEvent) {
     event.preventDefault();
+
+    // If required properties are filled then add todo
+    if (state.title) {
+      // TODO: Add uuid library
+      const id = Math.random() * 10000;
+      dispatch({ type: "ADD_TODO", payload: { todo: { ...state, id } } });
+    }
   }
+
+  useEffect(() => {
+    // TODO: Navigate to home route
+    console.log("todo_added");
+  }, [store]);
 
   return (
     <form className="w-full max-w-lg" onSubmit={handleSubmit}>
