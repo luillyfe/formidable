@@ -8,15 +8,16 @@ interface Payload {
   todos: Task[];
 }
 
-interface Action {
+export interface Action {
   type: string;
   payload?: Payload;
 }
 
 export default function reducerStore(state: Store, action: Action): Store {
   switch (action.type) {
-    case "LOAD_TODOS": {
-      return state;
+    case "SET_TODOS": {
+      const todos = action.payload?.todos || [];
+      return { ...state, todos };
     }
 
     default: {

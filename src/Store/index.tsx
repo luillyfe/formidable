@@ -1,17 +1,21 @@
-import { ReactNode, createContext, useReducer } from "react";
+import { ReactNode, Dispatch, createContext, useReducer } from "react";
 
-import reducerStore, { Store } from "./ReducerStore";
+import reducerStore, { Store, Action } from "./ReducerStore";
 
 const store: Store = {
   todos: [],
 };
 
-export const StoreContext = createContext(store);
+const dispatch: Dispatch<Action> = () => null;
+
+export const StoreContext = createContext({ store, dispatch });
 
 export function StoreProvider({ children }: { children: ReactNode }) {
-  const [state] = useReducer(reducerStore, store);
+  const [state, dispatch] = useReducer(reducerStore, store);
 
   return (
-    <StoreContext.Provider value={state}>{children}</StoreContext.Provider>
+    <StoreContext.Provider value={{ store: state, dispatch }}>
+      {children}
+    </StoreContext.Provider>
   );
 }
