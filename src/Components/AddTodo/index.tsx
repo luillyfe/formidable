@@ -1,6 +1,9 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, MouseEvent, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function AddTodo() {
+  const navigate = useNavigate();
+
   const [state, setState] = useState({ title: "", description: "" });
 
   function handleChange(
@@ -16,8 +19,13 @@ export default function AddTodo() {
     event.preventDefault();
   }
 
+  function handleClick(event: MouseEvent) {
+    event.stopPropagation();
+    navigate("/");
+  }
+
   return (
-    <form className="w-full max-w-lg" onSubmit={handleSubmit}>
+    <form role="form" className="w-full max-w-lg" onSubmit={handleSubmit}>
       <div className="flex flex-wrap -mx-3 mb-6">
         <div className="w-1/2 md:w-full px-3 mb-6 md:mb-0">
           <label
@@ -65,7 +73,11 @@ export default function AddTodo() {
       </div>
       <div className="flex flex-wrap -mx-3 mb-6">
         <div className="w-1/2 px-3 mb-6 md:mb-0">
-          <button className="w-full py-1 px-2 flex-shrink-0 bg-indigo-500 hover:bg-indigo-500 border-indigo-500 hover:border-indigo-700 text-sm border-4 text-white font-semibold rounded-r-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+          <button
+            className="w-full py-1 px-2 flex-shrink-0 bg-indigo-500 hover:bg-indigo-500 border-indigo-500 hover:border-indigo-700 text-sm border-4 text-white font-semibold rounded-r-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            type="button"
+            onClick={handleClick}
+          >
             Back
           </button>
         </div>
