@@ -3,7 +3,7 @@ import { BrowserRouter } from "react-router-dom";
 import "@testing-library/jest-dom";
 import ListTodos from "./index";
 
-test("A new button must be on component", () => {
+test("Must render an empty todo list component", () => {
   // Arrange
   render(<ListTodos todos={[]} />, {
     wrapper: BrowserRouter,
@@ -11,6 +11,7 @@ test("A new button must be on component", () => {
 
   // Assert
   expect(screen.getByText(/New/i)).toBeInTheDocument();
+  expect(screen.queryAllByRole("link")).toHaveLength(0);
 });
 
 describe("Rendering todos", () => {
