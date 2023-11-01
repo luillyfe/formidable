@@ -5,19 +5,17 @@ import { BrowserRouter } from "react-router-dom";
 
 import AddTodo from ".";
 
-describe("AddTodo Component", () => {
-  test("must render a form", () => {
-    // Arrange
-    render(<AddTodo />, { wrapper: BrowserRouter });
+test("Must render the component for adding a todo", () => {
+  // Arrange
+  render(<AddTodo />, { wrapper: BrowserRouter });
 
-    // Assert
-    expect(screen.getByRole("form")).toBeInTheDocument();
-  });
-
-  test("must render a back button", () => {
-    // Arrange
-    render(<AddTodo />, { wrapper: BrowserRouter });
-
-    expect(screen.getAllByRole("button", { name: "Back" })).toBeInTheDocument;
-  });
+  // Assert
+  // must render a form
+  expect(screen.getByRole("form")).toBeInTheDocument();
+  // two buttons must be on the screen
+  expect(screen.getAllByRole("button")).toHaveLength(2);
+  // Back button must on the screen
+  expect(screen.getByRole("button", { name: "Back" })).toBeInTheDocument();
+  // Add button must be on the screen
+  expect(screen.getByRole("button", { name: "Add" })).toBeInTheDocument();
 });
