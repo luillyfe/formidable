@@ -1,10 +1,20 @@
+import { useContext, useEffect } from "react";
 import { useLoaderData } from "react-router-dom";
 
-import ListTodos from "../Components/ListTodos";
+import { StoreContext } from "../Store";
+
 import { Task } from "../data/todo";
+
+import ListTodos from "../Components/ListTodos";
 
 export default function HomePage() {
   const { todos } = useLoaderData() as { todos: Task[] };
+  const { dispatch } = useContext(StoreContext);
+
+  // Set in the store
+  useEffect(() => {
+    dispatch({ type: "SET_TODOS", payload: { todos } });
+  }, [dispatch, todos]);
 
   return (
     <>
