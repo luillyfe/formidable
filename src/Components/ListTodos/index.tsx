@@ -24,6 +24,7 @@ export default function ListTodos({ todos: loadedTodos }: { todos: Task[] }) {
                 title={todo.title}
                 description={todo.description}
                 id={todo.id}
+                key={todo.id}
               />
             ))}
           </div>
