@@ -25,7 +25,7 @@ export default function AddTodo() {
   }
 
   return (
-    <form className="w-full max-w-lg" onSubmit={handleSubmit}>
+    <form role="form" className="w-full max-w-lg" onSubmit={handleSubmit}>
       <div className="flex flex-wrap -mx-3 mb-6">
         <div className="w-1/2 md:w-full px-3 mb-6 md:mb-0">
           <label
