@@ -1,53 +1,19 @@
-import {
-  ChangeEvent,
-  FormEvent,
-  MouseEvent,
-  useState,
-  useEffect,
-  useContext,
-} from "react";
-import { useNavigate } from "react-router-dom";
+import { MouseEvent } from "react";
+import { Form, useLoaderData, useNavigate } from "react-router-dom";
 
-import { StoreContext } from "../../Store";
+import { Task } from "../../data/todo";
 
 export default function AddTodo() {
-  const { store, dispatch } = useContext(StoreContext);
+  const { todo } = useLoaderData() as { todo: Task };
   const navigate = useNavigate();
-
-  const [state, setState] = useState({ title: "", description: "" });
-
-  function handleChange(
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) {
-    const value = event.target.value;
-    const name = event.target.name;
-
-    setState({ ...state, [name]: value });
-  }
-
-  function handleSubmit(event: FormEvent) {
-    event.preventDefault();
-
-    // If required properties are filled then add todo
-    if (state.title) {
-      // TODO: Add uuid library
-      const id = Math.random() * 10000;
-      dispatch({ type: "ADD_TODO", payload: { todo: { ...state, id } } });
-    }
-  }
 
   function handleClick(event: MouseEvent) {
     event.stopPropagation();
     navigate("/");
   }
 
-  useEffect(() => {
-    // TODO: Navigate to home route
-    console.log("todo_added");
-  }, [store]);
-
   return (
-    <form role="form" className="w-full max-w-lg" onSubmit={handleSubmit}>
+    <Form method="post" role="form" className="w-full max-w-lg">
       <div className="flex flex-wrap -mx-3 mb-6">
         <div className="w-1/2 md:w-full px-3 mb-6 md:mb-0">
           <label
@@ -62,8 +28,7 @@ export default function AddTodo() {
             type="text"
             placeholder="Todo Title"
             name="title"
-            value={state.title}
-            onChange={handleChange}
+            defaultValue={todo.title}
           />
           <p className="text-red-500 text-xs italic">
             Please fill out the todo title.
@@ -84,8 +49,7 @@ export default function AddTodo() {
             className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 focus:bg-white"
             placeholder="Write your description here..."
             name="description"
-            value={state.description}
-            onChange={handleChange}
+            defaultValue={todo.description}
           ></textarea>
 
           <p className="text-gray-600 text-xs italic">
@@ -111,6 +75,6 @@ export default function AddTodo() {
           ></input>
         </div>
       </div>
-    </form>
+    </Form>
   );
 }
