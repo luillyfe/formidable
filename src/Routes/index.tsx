@@ -21,6 +21,11 @@ export function AppWithRouter() {
         {
           path: "todos/new",
           Component: AddTodoPage,
+          loader: () => {
+            const todo = { id: 0, title: "", description: "" };
+            return { todo };
+          },
+          // action: handleTodoSubmit,
         },
       ],
     },
