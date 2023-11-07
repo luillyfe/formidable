@@ -1,4 +1,4 @@
-import { Task } from "../data/todo";
+import { Task } from "./types";
 
 export interface Store {
   todos: Task[];
