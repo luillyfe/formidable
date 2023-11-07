@@ -36,12 +36,15 @@ export async function addTodo(todo: Task): Promise<Task> {
     },
   };
 
-  const response = await fetch(`${firestoreURL}/(default)/documents/todos`, {
-    method: "POST",
-    mode: "cors",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  });
+  const response = await fetch(
+    `${firestoreURL}/(default)/documents/todos/${todo.id}`,
+    {
+      method: "PATCH",
+      mode: "cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    }
+  );
 
   if (response.ok) {
     const { fields } = (await response.json()) as { fields: Fields };
