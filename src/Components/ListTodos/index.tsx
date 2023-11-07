@@ -1,7 +1,7 @@
 import { useState, MouseEvent } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { Task } from "../../data/todo";
+import { Task } from "../../Store/types";
 import Todo from "../Todo";
 
 export default function ListTodos({ todos: loadedTodos }: { todos: Task[] }) {

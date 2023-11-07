@@ -1,4 +1,4 @@
-import { Task } from "../../data/todo";
+import { Task } from "../../Store/types";
 
 export default function Todo({ title, description }: Task) {
   return (

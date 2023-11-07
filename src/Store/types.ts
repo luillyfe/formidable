@@ -9,3 +9,11 @@ export interface Task {
   subtasks?: Task[];
   attachments?: string[];
 }
+
+export interface FirebaseDoc {
+  fields: {
+    id: { integerValue: number };
+    title: { stringValue: string };
+    description: { stringValue: string };
+  };
+}

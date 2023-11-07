@@ -3,7 +3,7 @@ import { useLoaderData } from "react-router-dom";
 
 import { StoreContext } from "../Store";
 
-import { Task } from "../data/todo";
+import { Task } from "../Store/types";
 
 import ListTodos from "../Components/ListTodos";
 
