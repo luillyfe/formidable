@@ -1,16 +1,35 @@
 import { MouseEvent } from "react";
-import { useNavigate, useLoaderData } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 
-import { Task } from "../../Store/types";
 import Todo from "../Todo";
+import { fetchTodos } from "../../Store/actions";
 
 export default function ListTodos() {
-  const { todos } = useLoaderData() as { todos: Task[] };
   const navigate = useNavigate();
+  const {
+    isError,
+    isPending,
+    data: todos,
+    error,
+  } = useQuery({
+    queryKey: ["todos"],
+    queryFn: fetchTodos,
+    retry: 3,
+    refetchOnWindowFocus: false,
+  });
 
   function handleClick(event: MouseEvent<HTMLButtonElement>) {
     event.stopPropagation();
     navigate("/todos/new");
+  }
+
+  if (isPending) {
+    return <span>Loading todos...</span>;
+  }
+
+  if (isError) {
+    return <span>Error: {error.message}</span>;
   }
 
   return (
