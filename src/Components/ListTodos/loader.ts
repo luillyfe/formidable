@@ -1,13 +1,8 @@
-import tasks from "../../data/tasks.json";
-
-import { Task } from "../../data/todo";
+import { fetchTodos } from "../../Store/actions";
+import { Task } from "../../Store/types";
 
 export async function todosLoader(): Promise<{ todos: Task[] }> {
-  const todos = tasks.map((task) => ({
-    id: task.id,
-    title: task.title,
-    description: task.description,
-  }));
+  const todos = await fetchTodos();
 
   return { todos };
 }

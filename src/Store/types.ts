@@ -1,5 +1,5 @@
 export interface Task {
-  id: number;
+  id: string;
   title: string;
   description?: string;
   dueDate?: Date;
@@ -8,4 +8,14 @@ export interface Task {
   category?: string;
   subtasks?: Task[];
   attachments?: string[];
+}
+
+export interface Fields {
+  id: { stringValue: string };
+  title: { stringValue: string };
+  description: { stringValue: string };
+}
+
+export interface FirebaseDoc {
+  fields: Fields;
 }
