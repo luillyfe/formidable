@@ -1,7 +1,7 @@
 import { MouseEvent } from "react";
 import { Form, useLoaderData, useNavigate } from "react-router-dom";
 
-import { Task } from "../../data/todo";
+import { Task } from "../../Store/types";
 
 export default function AddTodo() {
   const { todo } = useLoaderData() as { todo: Task };
