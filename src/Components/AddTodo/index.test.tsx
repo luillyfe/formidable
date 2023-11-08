@@ -1,13 +1,38 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 
-import { BrowserRouter } from "react-router-dom";
+import { RouterProvider, createMemoryRouter } from "react-router-dom";
 
 import AddTodo from ".";
 
-test("Must render the component for adding a todo", () => {
+// Remix router is failing for some reason around the Request obj
+global["Request"] = jest.fn().mockImplementation(() => ({
+  signal: {
+    removeEventListener: () => {},
+    addEventListener: () => {},
+  },
+}));
+
+test("Must render the component for adding a todo", async () => {
+  const routes = [
+    {
+      path: "/",
+      element: <AddTodo />,
+      loader: () => {
+        const todo = { id: "0", title: "", description: "" };
+        return { todo };
+      },
+    },
+  ];
+  // A data router is required
+  const router = createMemoryRouter(routes, {
+    initialEntries: ["/"],
+    initialIndex: 1,
+  });
+
   // Arrange
-  render(<AddTodo />, { wrapper: BrowserRouter });
+  const { getByRole } = render(<RouterProvider router={router} />);
+  await waitFor(() => getByRole("form"));
 
   // Assert
   // Must render the form for adding new todos

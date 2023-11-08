@@ -5,7 +5,8 @@ export interface Store {
 }
 
 interface Payload {
-  todos: Task[];
+  todos?: Task[];
+  todo?: Task;
 }
 
 export interface Action {
@@ -18,6 +19,14 @@ export default function reducerStore(state: Store, action: Action): Store {
     case "SET_TODOS": {
       const todos = action.payload?.todos || [];
       return { ...state, todos };
+    }
+
+    case "ADD_TODO": {
+      const todo = action.payload?.todo;
+      if (todo) {
+        return { ...state, todos: [todo, ...state.todos] };
+      }
+      return state;
     }
 
     default: {

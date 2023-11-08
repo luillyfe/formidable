@@ -1,7 +1,8 @@
-import { ReactNode, Dispatch, createContext, useReducer } from "react";
+import { ReactNode, createContext, useReducer, Dispatch } from "react";
 
-import reducerStore, { Store, Action } from "./ReducerStore";
+import reducerStore, { Action, Store } from "./ReducerStore";
 
+// TODO: Must be an object not an array
 const store: Store = {
   todos: [],
 };
