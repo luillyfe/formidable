@@ -3,10 +3,10 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import App from "../App";
 
 import { todosLoader } from "../Components/ListTodos/loader";
+import { handleTodoSubmit } from "../Components/AddTodo/action";
 
 import HomePage from "../Pages/HomePage";
 import AddTodoPage from "../Pages/AddTodoPage";
-import { handleTodoSubmit } from "../Components/AddTodo/action";
 
 export function AppWithRouter() {
   const router = createBrowserRouter([

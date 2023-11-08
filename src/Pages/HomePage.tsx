@@ -1,21 +1,6 @@
-import { useContext, useEffect } from "react";
-import { useLoaderData } from "react-router-dom";
-
-import { StoreContext } from "../Store";
-
-import { Task } from "../Store/types";
-
 import ListTodos from "../Components/ListTodos";
 
 export default function HomePage() {
-  const { todos } = useLoaderData() as { todos: Task[] };
-  const { dispatch } = useContext(StoreContext);
-
-  // Set in the store
-  useEffect(() => {
-    dispatch({ type: "SET_TODOS", payload: { todos } });
-  }, [dispatch, todos]);
-
   return (
     <>
       {/* pt-32 sm:pt-48 lg:pt-56 */}
@@ -40,7 +25,7 @@ export default function HomePage() {
           </div>
         </form>
       </div>
-      <ListTodos todos={todos} />
+      <ListTodos />
     </>
   );
 }

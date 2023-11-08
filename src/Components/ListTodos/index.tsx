@@ -1,12 +1,11 @@
-import { useState, MouseEvent } from "react";
-import { useNavigate } from "react-router-dom";
+import { MouseEvent } from "react";
+import { useNavigate, useLoaderData } from "react-router-dom";
 
 import { Task } from "../../Store/types";
 import Todo from "../Todo";
 
-export default function ListTodos({ todos: loadedTodos }: { todos: Task[] }) {
-  const [todos] = useState(loadedTodos);
-
+export default function ListTodos() {
+  const { todos } = useLoaderData() as { todos: Task[] };
   const navigate = useNavigate();
 
   function handleClick(event: MouseEvent<HTMLButtonElement>) {
