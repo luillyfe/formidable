@@ -1,10 +1,16 @@
 import { MouseEvent } from "react";
-import { Form, useLoaderData, useNavigate } from "react-router-dom";
+import {
+  Form,
+  useActionData,
+  useLoaderData,
+  useNavigate,
+} from "react-router-dom";
 
-import { Task } from "../../Store/types";
+import { Task, FormTodoErrors } from "../../Store/types";
 
 export default function AddTodo() {
   const { todo } = useLoaderData() as { todo: Task };
+  const errors = useActionData() as FormTodoErrors;
   const navigate = useNavigate();
 
   function handleClick(event: MouseEvent) {
@@ -23,16 +29,17 @@ export default function AddTodo() {
             Title
           </label>
           <input
-            className="appearance-none block w-full bg-gray-100 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+            // "border-red-500"
+            className="appearance-none block w-full bg-gray-100 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
             id="title"
             type="text"
             placeholder="Todo Title"
             name="title"
             defaultValue={todo.title}
           />
-          <p className="text-red-500 text-xs italic">
-            Please fill out the todo title.
-          </p>
+          {errors && errors.title && (
+            <p className="text-red-500 text-xs italic">{errors.title}</p>
+          )}
         </div>
       </div>
       <div className="flex flex-wrap -mx-3 mb-6">
@@ -51,7 +58,9 @@ export default function AddTodo() {
             name="description"
             defaultValue={todo.description}
           ></textarea>
-
+          {errors && errors.description && (
+            <p className="text-red-500 text-xs italic">{errors.description}</p>
+          )}
           <p className="text-gray-600 text-xs italic">
             Make it as long and as crazy as you'd like
           </p>

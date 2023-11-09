@@ -19,3 +19,8 @@ export interface Fields {
 export interface FirebaseDoc {
   fields: Fields;
 }
+
+export interface FormTodoErrors {
+  title: string;
+  description: string;
+}
