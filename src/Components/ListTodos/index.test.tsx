@@ -2,20 +2,21 @@ import { ReactNode } from "react";
 import { render, screen, waitFor } from "@testing-library/react";
 import { RouterProvider, createMemoryRouter } from "react-router-dom";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import { Router } from "@remix-run/router";
+
 import { fetchTodos } from "../../Store/actions";
 
 import "@testing-library/jest-dom";
 
 import ListTodos from "./index";
 
-// Implementation ust be changed due to test
 jest.mock("../../Store/actions", () => {
   return {
     fetchTodos: jest.fn(() => []),
   };
 });
 
-let router: unknown,
+let router: Router,
   Wrapper: React.JSXElementConstructor<{
     children: React.ReactElement;
   }>;
@@ -47,7 +48,6 @@ beforeAll(() => {
 
 test("Must render an empty todo list component", async () => {
   // Arrange
-  // @ts-expect-error: I could'n find the proper types for Router
   const { getByRole } = render(<RouterProvider router={router} />, {
     wrapper: Wrapper,
   });
@@ -72,7 +72,6 @@ describe("Rendering todos", () => {
 
   test("Must render 5 links", async () => {
     // Arrange
-    // @ts-expect-error: I could'n find the proper types for Router
     const { queryAllByRole } = render(<RouterProvider router={router} />, {
       wrapper: Wrapper,
     });
