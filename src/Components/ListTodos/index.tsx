@@ -1,4 +1,4 @@
-import { MouseEvent } from "react";
+import { MouseEvent, ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 
@@ -6,7 +6,6 @@ import Todo from "../Todo";
 import { fetchTodos } from "../../Store/actions";
 
 export default function ListTodos() {
-  const navigate = useNavigate();
   const {
     isError,
     isPending,
@@ -19,13 +18,12 @@ export default function ListTodos() {
     refetchOnWindowFocus: false,
   });
 
-  function handleClick(event: MouseEvent<HTMLButtonElement>) {
-    event.stopPropagation();
-    navigate("/todos/new");
-  }
-
   if (isPending) {
-    return <span>Loading todos...</span>;
+    return (
+      <Layout>
+        <span>Loading todos...</span>
+      </Layout>
+    );
   }
 
   if (isError) {
@@ -33,18 +31,32 @@ export default function ListTodos() {
   }
 
   return (
+    <Layout>
+      {todos.map((todo) => (
+        <Todo
+          title={todo.title}
+          description={todo.description}
+          id={todo.id}
+          key={todo.id}
+        />
+      ))}
+    </Layout>
+  );
+}
+
+function Layout({ children }: { children: ReactNode }) {
+  const navigate = useNavigate();
+  function handleClick(event: MouseEvent<HTMLButtonElement>) {
+    event.stopPropagation();
+    navigate("/todos/new");
+  }
+
+  return (
     <div className="relative">
       <div className="absolute left-1/2 z-10 mt-5 flex w-screen max-w-max -translate-x-1/2 px-4">
         <div className="w-screen max-w-md flex-auto overflow-hidden rounded-3xl bg-white text-sm leading-6 shadow-lg ring-1 ring-gray-900/5">
           <div className="p-4" role="list">
-            {todos.map((todo) => (
-              <Todo
-                title={todo.title}
-                description={todo.description}
-                id={todo.id}
-                key={todo.id}
-              />
-            ))}
+            {children}
           </div>
         </div>
         <div className="h-10 transform -rotate-90 mt-3">
