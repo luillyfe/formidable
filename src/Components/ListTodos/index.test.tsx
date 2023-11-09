@@ -1,13 +1,57 @@
-import { render, screen } from "@testing-library/react";
-import { BrowserRouter } from "react-router-dom";
+import { ReactNode } from "react";
+import { render, screen, waitFor } from "@testing-library/react";
+import { RouterProvider, createMemoryRouter } from "react-router-dom";
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import { Router } from "@remix-run/router";
+
+import { fetchTodos } from "../../Store/actions";
+
 import "@testing-library/jest-dom";
+
 import ListTodos from "./index";
 
-test("Must render an empty todo list component", () => {
-  // Arrange
-  render(<ListTodos todos={[]} />, {
-    wrapper: BrowserRouter,
+jest.mock("../../Store/actions", () => {
+  return {
+    fetchTodos: jest.fn(() => []),
+  };
+});
+
+let router: Router,
+  Wrapper: React.JSXElementConstructor<{
+    children: React.ReactElement;
+  }>;
+beforeAll(() => {
+  // Define routes
+  const routes = [
+    {
+      path: "/",
+      element: <ListTodos />,
+    },
+  ];
+
+  // Create router
+  router = createMemoryRouter(routes, {
+    initialEntries: ["/"],
+    initialIndex: 1,
   });
+
+  // Define QueryWrapper
+  const client = new QueryClient();
+  Wrapper = ({ children }: { children: ReactNode }) => {
+    return (
+      <QueryClientProvider client={client}>{children}</QueryClientProvider>
+    );
+  };
+
+  return { router, Wrapper };
+});
+
+test("Must render an empty todo list component", async () => {
+  // Arrange
+  const { getByRole } = render(<RouterProvider router={router} />, {
+    wrapper: Wrapper,
+  });
+  await waitFor(() => getByRole("list"));
 
   // Assert
   expect(screen.getByText(/New/i)).toBeInTheDocument();
@@ -15,18 +59,23 @@ test("Must render an empty todo list component", () => {
 });
 
 describe("Rendering todos", () => {
-  const todos = [
-    { id: 1, title: "todo1", description: "description1" },
-    { id: 2, title: "todo2", description: "description2" },
-    { id: 3, title: "todo3", description: "description3" },
-    { id: 4, title: "todo4", description: "description4" },
-    { id: 5, title: "todo5", description: "description5" },
-  ];
-  test("Must render 5 links", () => {
+  beforeEach(() => {
+    const todos = [
+      { id: "0", title: "", description: "" },
+      { id: "1", title: "", description: "" },
+      { id: "2", title: "", description: "" },
+      { id: "3", title: "", description: "" },
+      { id: "4", title: "", description: "" },
+    ];
+    (fetchTodos as jest.Mock).mockReturnValue(todos);
+  });
+
+  test("Must render 5 links", async () => {
     // Arrange
-    render(<ListTodos todos={todos} />, {
-      wrapper: BrowserRouter,
+    const { queryAllByRole } = render(<RouterProvider router={router} />, {
+      wrapper: Wrapper,
     });
+    await waitFor(() => queryAllByRole("link"));
 
     // Assert
     expect(screen.queryAllByRole("link")).toHaveLength(5);

@@ -1,13 +1,51 @@
-import { MouseEvent } from "react";
-import { useNavigate, useLoaderData } from "react-router-dom";
+import { MouseEvent, ReactNode } from "react";
+import { useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 
-import { Task } from "../../Store/types";
 import Todo from "../Todo";
+import { fetchTodos } from "../../Store/actions";
 
 export default function ListTodos() {
-  const { todos } = useLoaderData() as { todos: Task[] };
-  const navigate = useNavigate();
+  const {
+    isError,
+    isPending,
+    data: todos,
+    error,
+  } = useQuery({
+    queryKey: ["todos"],
+    queryFn: fetchTodos,
+    retry: 3,
+    refetchOnWindowFocus: false,
+  });
 
+  if (isPending) {
+    return (
+      <Layout>
+        <span>Loading todos...</span>
+      </Layout>
+    );
+  }
+
+  if (isError) {
+    return <span>Error: {error.message}</span>;
+  }
+
+  return (
+    <Layout>
+      {todos.map((todo) => (
+        <Todo
+          title={todo.title}
+          description={todo.description}
+          id={todo.id}
+          key={todo.id}
+        />
+      ))}
+    </Layout>
+  );
+}
+
+function Layout({ children }: { children: ReactNode }) {
+  const navigate = useNavigate();
   function handleClick(event: MouseEvent<HTMLButtonElement>) {
     event.stopPropagation();
     navigate("/todos/new");
@@ -17,15 +55,8 @@ export default function ListTodos() {
     <div className="relative">
       <div className="absolute left-1/2 z-10 mt-5 flex w-screen max-w-max -translate-x-1/2 px-4">
         <div className="w-screen max-w-md flex-auto overflow-hidden rounded-3xl bg-white text-sm leading-6 shadow-lg ring-1 ring-gray-900/5">
-          <div className="p-4">
-            {todos.map((todo) => (
-              <Todo
-                title={todo.title}
-                description={todo.description}
-                id={todo.id}
-                key={todo.id}
-              />
-            ))}
+          <div className="p-4" role="list">
+            {children}
           </div>
         </div>
         <div className="h-10 transform -rotate-90 mt-3">

@@ -1,23 +1,32 @@
 import { Fields, FirebaseDoc, Task } from "./types";
+import { formatDocument } from "./utils";
 
 const firestoreURL = import.meta.env.VITE_FIRESTORE_URL;
 
-export async function fetchTodos(): Promise<Task[]> {
+async function fetchDocuments(): Promise<FirebaseDoc[]> {
   const response = await fetch(`${firestoreURL}/(default)/documents/todos`);
   // If everything went smoothly
   if (response.ok) {
     const { documents } = await response.json();
 
-    const todos = documents.map((document: FirebaseDoc) => ({
-      id: document?.fields?.id.stringValue || "",
-      title: document?.fields?.title.stringValue || "",
-      description: document?.fields?.description.stringValue || "",
-    }));
-
-    return todos;
+    return documents;
   }
 
-  return [];
+  // TODO: handle error
+  return [
+    {
+      fields: {
+        id: { stringValue: "" },
+        title: { stringValue: "" },
+        description: { stringValue: "" },
+      },
+    },
+  ];
+}
+
+export async function fetchTodos(): Promise<Task[]> {
+  const documents = await fetchDocuments();
+  return documents.map(formatDocument);
 }
 
 export async function addTodo(todo: Task): Promise<Task> {

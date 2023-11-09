@@ -2,7 +2,6 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 import App from "../App";
 
-import { todosLoader } from "../Components/ListTodos/loader";
 import { handleTodoSubmit } from "../Components/AddTodo/action";
 
 import HomePage from "../Pages/HomePage";
@@ -17,7 +16,6 @@ export function AppWithRouter() {
         {
           path: "",
           Component: HomePage,
-          loader: todosLoader,
         },
         {
           path: "todos/new",
