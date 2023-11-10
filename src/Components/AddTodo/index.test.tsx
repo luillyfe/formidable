@@ -1,17 +1,14 @@
-import { render, screen, waitFor } from "@testing-library/react";
-import "@testing-library/jest-dom";
-
 import { RouterProvider, createMemoryRouter } from "react-router-dom";
 
-import AddTodo from ".";
+import "@testing-library/jest-dom";
+import "whatwg-fetch";
+import { render, screen, waitFor } from "@testing-library/react";
+import { installGlobals } from "@remix-run/node";
 
-// Remix router is failing for some reason around the Request obj
-global["Request"] = jest.fn().mockImplementation(() => ({
-  signal: {
-    removeEventListener: () => {},
-    addEventListener: () => {},
-  },
-}));
+// This installs globals such as "fetch", "Response", "Request" and "Headers".
+installGlobals();
+
+import AddTodo from ".";
 
 test("Must render the component for adding a todo", async () => {
   const routes = [
