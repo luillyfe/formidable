@@ -5,6 +5,7 @@ import {
   useLoaderData,
   useNavigate,
 } from "react-router-dom";
+import classNames from "classnames";
 
 import { Task, FormTodoErrors } from "../../Store/types";
 
@@ -29,8 +30,11 @@ export default function AddTodo() {
             Title
           </label>
           <input
-            // "border-red-500"
-            className="appearance-none block w-full bg-gray-100 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+            className={classNames({
+              "appearance-none block w-full bg-gray-100 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white":
+                true,
+              "border-red-500": errors && errors.title,
+            })}
             id="title"
             type="text"
             placeholder="Todo Title"
@@ -53,7 +57,11 @@ export default function AddTodo() {
           <textarea
             id="description"
             rows={4}
-            className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 focus:bg-white"
+            className={classNames({
+              "block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 focus:bg-white":
+                true,
+              "border-red-500": errors && errors.description,
+            })}
             placeholder="Write your description here..."
             name="description"
             defaultValue={todo.description}
