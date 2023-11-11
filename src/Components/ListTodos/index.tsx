@@ -18,6 +18,16 @@ export default function ListTodos() {
     refetchOnWindowFocus: false,
   });
 
+  const navigate = useNavigate();
+
+  function handleClick(todoId: string) {
+    return (event: MouseEvent) => {
+      event.stopPropagation();
+      event.preventDefault();
+      navigate(`/todos/${todoId}/edit`);
+    };
+  }
+
   if (isPending) {
     return (
       <Layout>
@@ -38,6 +48,7 @@ export default function ListTodos() {
           description={todo.description}
           id={todo.id}
           key={todo.id}
+          handleClick={handleClick(todo.id)}
         />
       ))}
     </Layout>
