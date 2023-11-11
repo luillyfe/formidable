@@ -24,9 +24,36 @@ async function fetchDocuments(): Promise<FirebaseDoc[]> {
   ];
 }
 
+async function fetchDocument(documentId: string): Promise<FirebaseDoc> {
+  const response = await fetch(
+    `${firestoreURL}/(default)/documents/todos/${documentId}`
+  );
+
+  // If everything went smoothly
+  if (response.ok) {
+    const document = await response.json();
+
+    return document;
+  }
+
+  // TODO: handle error
+  return {
+    fields: {
+      id: { stringValue: "" },
+      title: { stringValue: "" },
+      description: { stringValue: "" },
+    },
+  };
+}
+
 export async function fetchTodos(): Promise<Task[]> {
   const documents = await fetchDocuments();
   return documents.map(formatDocument);
+}
+
+export async function fetchTodo(todoId: string): Promise<Task> {
+  const document = await fetchDocument(todoId);
+  return formatDocument(document);
 }
 
 export async function addTodo(todo: Task): Promise<Task> {
