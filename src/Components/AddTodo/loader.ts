@@ -8,6 +8,6 @@ export async function todoLoader({ params }: { params: Params }) {
     return { todo };
   }
 
-  const todo = { id: 0, title: "", description: "" };
+  const todo = { title: "", description: "" };
   return { todo };
 }
