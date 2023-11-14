@@ -28,6 +28,7 @@ export function AppWithRouter() {
           path: "todos/:todoId/edit",
           Component: AddTodoPage,
           loader: todoLoader,
+          action: handleTodoSubmit,
         },
       ],
     },

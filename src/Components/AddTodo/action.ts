@@ -1,9 +1,15 @@
-import { redirect } from "react-router-dom";
+import { Params, redirect } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { addTodo } from "../../Store/actions";
 import { FormTodoErrors } from "../../Store/types";
 
-export async function handleTodoSubmit({ request }: { request: Request }) {
+export async function handleTodoSubmit({
+  request,
+  params,
+}: {
+  request: Request;
+  params: Params;
+}) {
   // Form data
   const formData = await request.formData();
   const title = formData.get("title");
@@ -25,7 +31,7 @@ export async function handleTodoSubmit({ request }: { request: Request }) {
   }
 
   const todo = {
-    id: uuidv4(),
+    id: params.todoId ? params.todoId : uuidv4(),
     title: String(title),
     description: String(description),
   };
