@@ -87,7 +87,7 @@ export default function AddTodo() {
         <div className="w-1/2 px-3 mb-6 md:mb-0">
           <input
             className="w-full py-1 px-2 flex-shrink-0 bg-indigo-500 hover:bg-indigo-500 border-indigo-500 hover:border-indigo-700 text-sm border-4 text-white font-semibold rounded-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            value="Add"
+            value={todo.id ? "Save" : "Add"}
             type="submit"
           ></input>
         </div>

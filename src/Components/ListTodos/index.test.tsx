@@ -1,8 +1,12 @@
 import { ReactNode } from "react";
-import { render, screen, waitFor } from "@testing-library/react";
 import { RouterProvider, createMemoryRouter } from "react-router-dom";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+
+import "whatwg-fetch";
+import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { Router } from "@remix-run/router";
+import { installGlobals } from "@remix-run/node";
 
 import { fetchTodos } from "../../Store/actions";
 
@@ -21,11 +25,21 @@ let router: Router,
     children: React.ReactElement;
   }>;
 beforeAll(() => {
+  installGlobals();
+
+  function EditTodo() {
+    return <div>Editing a todo</div>;
+  }
+
   // Define routes
   const routes = [
     {
       path: "/",
       element: <ListTodos />,
+    },
+    {
+      path: "/todos/:todoId/edit",
+      element: <EditTodo />,
     },
   ];
 
@@ -79,5 +93,21 @@ describe("Rendering todos", () => {
 
     // Assert
     expect(screen.queryAllByRole("link")).toHaveLength(5);
+  });
+
+  test("Must navigate to the Edit route", async () => {
+    // Arrange
+    const user = userEvent.setup();
+    const { queryAllByRole } = render(<RouterProvider router={router} />, {
+      wrapper: Wrapper,
+    });
+    await waitFor(() => queryAllByRole("link"));
+    const editButton = screen.getAllByRole("document")[0];
+
+    // Act
+    await user.click(editButton);
+
+    // Assert
+    expect(await screen.findByText("Editing a todo")).toBeInTheDocument();
   });
 });
