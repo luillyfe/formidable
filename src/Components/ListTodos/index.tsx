@@ -1,9 +1,10 @@
-import { MouseEvent, ReactNode } from "react";
-import { useNavigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { ReactNode } from "react";
+import { Link } from "react-router-dom";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+
+import { fetchTodos, deleteDocument } from "../../Store/actions";
 
 import Todo from "../Todo";
-import { fetchTodos } from "../../Store/actions";
 
 export default function ListTodos() {
   const {
@@ -18,14 +19,14 @@ export default function ListTodos() {
     refetchOnWindowFocus: false,
   });
 
-  const navigate = useNavigate();
+  // Get QueryClient from the context
+  const queryClient = useQueryClient();
 
-  function handleClick(todoId: string) {
-    return (event: MouseEvent) => {
-      event.stopPropagation();
-      event.preventDefault();
-      navigate(`/todos/${todoId}/edit`);
-    };
+  function handleDelete(todoId: string) {
+    // if success, "todos" query below will be invalidated
+    deleteDocument(todoId).then(() => {
+      queryClient.invalidateQueries({ queryKey: ["todos"] });
+    });
   }
 
   if (isPending) {
@@ -48,7 +49,7 @@ export default function ListTodos() {
           description={todo.description}
           id={todo.id}
           key={todo.id}
-          handleClick={handleClick(todo.id)}
+          handleDelete={handleDelete}
         />
       ))}
     </Layout>
@@ -56,12 +57,6 @@ export default function ListTodos() {
 }
 
 function Layout({ children }: { children: ReactNode }) {
-  const navigate = useNavigate();
-  function handleClick(event: MouseEvent<HTMLButtonElement>) {
-    event.stopPropagation();
-    navigate("/todos/new");
-  }
-
   return (
     <div className="relative">
       <div className="absolute left-1/2 z-10 mt-5 flex w-screen max-w-max -translate-x-1/2 px-4">
@@ -71,13 +66,13 @@ function Layout({ children }: { children: ReactNode }) {
           </div>
         </div>
         <div className="h-10 transform -rotate-90 mt-3">
-          <button
+          <Link
+            to="/todos/new"
             className="flex-shrink-0 bg-indigo-500 hover:bg-indigo-500 border-indigo-500 hover:border-indigo-700 text-sm border-4 text-white font-semibold py-1 px-2 rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             type="button"
-            onClick={handleClick}
           >
             New
-          </button>
+          </Link>
         </div>
       </div>
     </div>
