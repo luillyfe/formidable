@@ -1,5 +1,3 @@
-import { MouseEvent } from "react";
-
 export interface Task {
   id: string;
   title: string;
@@ -13,7 +11,7 @@ export interface Task {
 }
 
 export interface TodoElement extends Task {
-  handleClick?: (event: MouseEvent) => void;
+  handleDelete: (todoId: string) => void;
 }
 
 export interface Fields {
