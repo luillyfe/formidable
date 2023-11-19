@@ -1,24 +1,23 @@
-import { MouseEvent } from "react";
-
 import "@testing-library/jest-dom";
+import { BrowserRouter } from "react-router-dom";
 import { render, screen } from "@testing-library/react";
 
 // import '@testing-library/jest-dom/vitest'
 
 import Todo from ".";
 
-describe("Todo Component", () => {
+describe.only("Todo Component", () => {
   test("render a single todo", () => {
     // Arrange
     const props = {
       id: "4",
       title: "Go dancing around",
       description: "Let have the most fun ever described",
-      handleClick: (event: MouseEvent) => {
-        event.stopPropagation();
+      handleDelete: (todoId: string) => {
+        console.log(todoId);
       },
     };
-    render(<Todo {...props} />);
+    render(<Todo {...props} />, { wrapper: BrowserRouter });
 
     // Assert
     expect(screen.getByRole("link")).toBeInTheDocument();
