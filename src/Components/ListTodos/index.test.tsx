@@ -20,6 +20,34 @@ jest.mock("../../Store/actions", () => {
   };
 });
 
+jest.mock("../Todo", () => {
+  // @ts-expect-error: no typechecking needed
+  function Todo({ title, description, handleClick }) {
+    return (
+      <div
+        className="group relative flex gap-x-6 rounded-lg p-4 hover:bg-gray-50"
+        role="document"
+        onClick={handleClick}
+      >
+        {/* <FlyoutMenu /> */}
+        <div>
+          <ul>
+            <li>Edit</li>
+          </ul>
+        </div>
+        <div>
+          <a href="#" className="font-semibold text-gray-900">
+            {title}
+            <span className="absolute inset-0"></span>
+          </a>
+          <p className="mt-1 text-gray-600">{description}</p>
+        </div>
+      </div>
+    );
+  }
+  return Todo;
+});
+
 let router: Router,
   Wrapper: React.JSXElementConstructor<{
     children: React.ReactElement;

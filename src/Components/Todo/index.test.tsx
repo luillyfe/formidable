@@ -7,6 +7,19 @@ import { render, screen } from "@testing-library/react";
 
 import Todo from ".";
 
+jest.mock("../FlyoutMenu", () => {
+  function FlyoutMenu() {
+    return (
+      <div>
+        <ul>
+          <li>Edit</li>
+        </ul>
+      </div>
+    );
+  }
+  return FlyoutMenu;
+});
+
 describe("Todo Component", () => {
   test("render a single todo", () => {
     // Arrange
