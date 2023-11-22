@@ -96,3 +96,19 @@ export async function addTodo(todo: Task): Promise<Task> {
   // TODO: Silent error??
   return { id: "", title: "", description: "" };
 }
+
+// TODO: Handle http error
+export async function deleteDocument(documentId: string) {
+  const response = await fetch(
+    `${firestoreURL}/(default)/documents/todos/${documentId}`,
+    {
+      method: "DELETE",
+      mode: "cors",
+      headers: { "Content-Type": "application/json" },
+    }
+  );
+
+  if (!response.ok) {
+    console.error("Something went wrong");
+  }
+}

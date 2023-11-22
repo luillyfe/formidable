@@ -3,7 +3,7 @@ import { RouterProvider, createMemoryRouter } from "react-router-dom";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 
 import "whatwg-fetch";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Router } from "@remix-run/router";
 import { installGlobals } from "@remix-run/node";
@@ -97,7 +97,7 @@ test("Must render an empty todo list component", async () => {
 
   // Assert
   expect(screen.getByText(/New/i)).toBeInTheDocument();
-  expect(screen.queryAllByRole("link")).toHaveLength(0);
+  expect(screen.queryAllByRole("link")).toHaveLength(1);
 });
 
 describe("Rendering todos", () => {
@@ -120,7 +120,7 @@ describe("Rendering todos", () => {
     await waitFor(() => queryAllByRole("link"));
 
     // Assert
-    expect(screen.queryAllByRole("link")).toHaveLength(5);
+    expect(screen.queryAllByRole("link")).toHaveLength(6);
   });
 
   test("Must navigate to the Edit route", async () => {
@@ -130,12 +130,24 @@ describe("Rendering todos", () => {
       wrapper: Wrapper,
     });
     await waitFor(() => queryAllByRole("link"));
-    const editButton = screen.getAllByRole("document")[0];
+    const editLinks = within(screen.getByRole("list")).getAllByRole("link");
 
     // Act
-    await user.click(editButton);
+    await user.click(editLinks[0]);
 
     // Assert
+    expect(editLinks).toHaveLength(5);
+    expect(editLinks[0]).toHaveAttribute("href");
+    expect(editLinks[0]).toHaveAttribute(
+      "href",
+      expect.stringContaining("/todos/")
+    );
+    expect(editLinks[1]).toHaveAttribute(
+      "href",
+      expect.stringContaining("/edit")
+    );
+
+    // Page transition is done
     expect(await screen.findByText("Editing a todo")).toBeInTheDocument();
   });
 });

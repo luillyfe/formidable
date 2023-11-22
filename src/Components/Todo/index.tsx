@@ -1,21 +1,24 @@
+import { memo } from "react";
 import { TodoElement } from "../../Store/types";
 import FlyoutMenu from "../FlyoutMenu";
+import { Link } from "react-router-dom";
 
-export default function Todo({ title, description, handleClick }: TodoElement) {
+const Todo = memo(function ({ id, title, description }: TodoElement) {
   return (
     <div
-      className="group relative flex gap-x-6 rounded-lg p-4 hover:bg-gray-50"
+      className="group flex gap-x-6 rounded-lg p-4 hover:bg-gray-50"
       role="document"
-      onClick={handleClick}
     >
       <FlyoutMenu />
       <div>
-        <a href="#" className="font-semibold text-gray-900">
+        <Link to={`/todos/${id}/edit`} className="font-semibold text-gray-900">
           {title}
           <span className="absolute inset-0"></span>
-        </a>
+        </Link>
         <p className="mt-1 text-gray-600">{description}</p>
       </div>
     </div>
   );
-}
+});
+
+export default Todo;

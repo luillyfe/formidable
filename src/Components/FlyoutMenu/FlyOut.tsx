@@ -22,6 +22,7 @@ function Toggle() {
   const { open, toggle } = useContext(FlyOutContext);
   return (
     <div
+      // flex-col h-14 w-11
       className="mt-1 flex flex-row h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white"
       onClick={() => toggle(!open)}
     >
