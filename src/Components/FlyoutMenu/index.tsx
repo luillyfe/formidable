@@ -9,8 +9,8 @@ export default function FlyoutMenu() {
       <FlyOut.Toggle />
       <FlyOut.List>
         <FlyOut.Item>
-          <Edit />
-          <Delete />
+          <Edit className="h-5 w-5" />
+          <Delete className="h-5 w-5" />
         </FlyOut.Item>
       </FlyOut.List>
     </FlyOut>
