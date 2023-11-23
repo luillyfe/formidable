@@ -2,15 +2,14 @@ import { ReactNode } from "react";
 import { RouterProvider, createMemoryRouter } from "react-router-dom";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 
+import "@testing-library/jest-dom";
 import "whatwg-fetch";
-import { render, screen, waitFor, within } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+
+import { render, screen, waitFor } from "@testing-library/react";
 import { Router } from "@remix-run/router";
 import { installGlobals } from "@remix-run/node";
 
 import { fetchTodos } from "../../Store/actions";
-
-import "@testing-library/jest-dom";
 
 import ListTodos from "./index";
 
@@ -22,19 +21,22 @@ jest.mock("../../Store/actions", () => {
 
 jest.mock("../Todo", () => {
   // @ts-expect-error: no typechecking needed
-  function Todo({ title, description, handleClick }) {
+  function Todo({ id, title, description, handleClick }) {
     return (
       <div
         className="group relative flex gap-x-6 rounded-lg p-4 hover:bg-gray-50"
         role="document"
         onClick={handleClick}
       >
-        {/* <FlyoutMenu /> */}
+        {/* <FlyoutMenu> */}
         <div>
           <ul>
-            <li>Edit</li>
+            <li>
+              <a href={`/todos/${id}/edit`}>Edit</a>
+            </li>
           </ul>
         </div>
+        {/* <FlyoutMenu/> */}
         <div>
           <a href="#" className="font-semibold text-gray-900">
             {title}
@@ -55,19 +57,11 @@ let router: Router,
 beforeAll(() => {
   installGlobals();
 
-  function EditTodo() {
-    return <div>Editing a todo</div>;
-  }
-
   // Define routes
   const routes = [
     {
       path: "/",
       element: <ListTodos />,
-    },
-    {
-      path: "/todos/:todoId/edit",
-      element: <EditTodo />,
     },
   ];
 
@@ -93,7 +87,7 @@ test("Must render an empty todo list component", async () => {
   const { getByRole } = render(<RouterProvider router={router} />, {
     wrapper: Wrapper,
   });
-  await waitFor(() => getByRole("list"));
+  await waitFor(() => getByRole("link"));
 
   // Assert
   expect(screen.getByText(/New/i)).toBeInTheDocument();
@@ -112,7 +106,7 @@ describe("Rendering todos", () => {
     (fetchTodos as jest.Mock).mockReturnValue(todos);
   });
 
-  test("Must render 5 links", async () => {
+  test("Must render all links in the page (Edit, Title and New links)", async () => {
     // Arrange
     const { queryAllByRole } = render(<RouterProvider router={router} />, {
       wrapper: Wrapper,
@@ -120,20 +114,21 @@ describe("Rendering todos", () => {
     await waitFor(() => queryAllByRole("link"));
 
     // Assert
-    expect(screen.queryAllByRole("link")).toHaveLength(6);
+    expect(screen.queryAllByRole("link")).toHaveLength(11);
   });
 
-  test("Must navigate to the Edit route", async () => {
+  test("Must render edit links with expected properties", async () => {
     // Arrange
-    const user = userEvent.setup();
-    const { queryAllByRole } = render(<RouterProvider router={router} />, {
-      wrapper: Wrapper,
-    });
+    const { queryAllByRole, container } = render(
+      <RouterProvider router={router} />,
+      {
+        wrapper: Wrapper,
+      }
+    );
     await waitFor(() => queryAllByRole("link"));
-    const editLinks = within(screen.getByRole("list")).getAllByRole("link");
-
-    // Act
-    await user.click(editLinks[0]);
+    const editLinks = container.querySelectorAll(
+      "#todo-list [href^='/todos/']"
+    );
 
     // Assert
     expect(editLinks).toHaveLength(5);
@@ -146,8 +141,5 @@ describe("Rendering todos", () => {
       "href",
       expect.stringContaining("/edit")
     );
-
-    // Page transition is done
-    expect(await screen.findByText("Editing a todo")).toBeInTheDocument();
   });
 });
