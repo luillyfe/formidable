@@ -1,8 +1,8 @@
 import { ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
-import { fetchTodos, deleteDocument } from "../../Store/actions";
+import { fetchTodos } from "../../Store/actions";
 
 import Todo from "../Todo";
 
@@ -18,16 +18,6 @@ export default function ListTodos() {
     retry: 3,
     refetchOnWindowFocus: false,
   });
-
-  // Get QueryClient from the context
-  const queryClient = useQueryClient();
-
-  function handleDelete(todoId: string) {
-    // if success, "todos" query below will be invalidated
-    deleteDocument(todoId).then(() => {
-      queryClient.invalidateQueries({ queryKey: ["todos"] });
-    });
-  }
 
   if (isPending) {
     return (
@@ -49,7 +39,6 @@ export default function ListTodos() {
           description={todo.description}
           id={todo.id}
           key={todo.id}
-          handleDelete={handleDelete}
         />
       ))}
     </Layout>
