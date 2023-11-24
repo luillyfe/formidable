@@ -1,13 +1,16 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { QueryClient } from "@tanstack/react-query";
 
 import App from "../App";
 
+import { todosLoader } from "../Components/ListTodos/loader";
 import { handleTodoSubmit } from "../Components/AddTodo/action";
 import { todoLoader } from "../Components/AddTodo/loader";
 
 import HomePage from "../Pages/HomePage";
 import AddTodoPage from "../Pages/AddTodoPage";
 
+const queryClient = new QueryClient();
 export function AppWithRouter() {
   const router = createBrowserRouter([
     {
@@ -17,6 +20,7 @@ export function AppWithRouter() {
         {
           path: "",
           Component: HomePage,
+          loader: todosLoader(queryClient),
         },
         {
           path: "todos/new",

@@ -2,22 +2,13 @@ import { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
-import { fetchTodos, deleteDocument } from "../../Store/actions";
+import { deleteDocument } from "../../Store/actions";
+import { todosQuery } from "./loader";
 
 import Todo from "../Todo";
 
 export default function ListTodos() {
-  const {
-    isError,
-    isPending,
-    data: todos,
-    error,
-  } = useQuery({
-    queryKey: ["todos"],
-    queryFn: fetchTodos,
-    retry: 3,
-    refetchOnWindowFocus: false,
-  });
+  const { isError, isPending, data: todos, error } = useQuery(todosQuery());
 
   // Get QueryClient from the context
   const queryClient = useQueryClient();
