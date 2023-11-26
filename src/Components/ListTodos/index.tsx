@@ -1,23 +1,15 @@
 import { ReactNode } from "react";
-import { Link, useLoaderData } from "react-router-dom";
-import { useQueryClient } from "@tanstack/react-query";
-
-import { deleteDocument } from "../../Store/actions";
+import { Link, useLoaderData, useSubmit } from "react-router-dom";
 
 import Todo from "../Todo";
 import { Task } from "../../Store/types";
 
 export default function ListTodos() {
   const { todos } = useLoaderData() as { todos: Task[] };
-
-  // Get QueryClient from the context
-  const queryClient = useQueryClient();
+  const submit = useSubmit();
 
   function handleDelete(todoId: string) {
-    // if success, "todos" query below will be invalidated
-    deleteDocument(todoId).then(() => {
-      queryClient.invalidateQueries({ queryKey: ["todos"] });
-    });
+    submit({ todoId }, { method: "delete" });
   }
 
   return (
