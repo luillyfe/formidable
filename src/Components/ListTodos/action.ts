@@ -7,7 +7,7 @@ export function deleteAction(queryClient: QueryClient) {
     const formData = await request.formData();
     const todoId = formData.get("todoId") as string;
 
-    // if success, "todos" query below will be invalidated
+    // if success, "todos" query below will be removed
     await deleteDocument(todoId).then(() => {
       queryClient.removeQueries({ queryKey: ["todos"] });
     });
