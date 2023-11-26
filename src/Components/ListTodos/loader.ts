@@ -18,13 +18,10 @@ export function todosLoader(queryClient: QueryClient) {
 
     // It does the trick for returning any data we have in the cache, even if it's stale.
     // If the query does not exist, queryClient.fetchQuery will be called and its results returned.
-    return await queryClient.ensureQueryData({ queryKey, queryFn });
+    const todos = (await queryClient.ensureQueryData({
+      queryKey,
+      queryFn,
+    })) as Task[];
+    return { todos };
   };
-}
-
-// TODO: remove loader
-export async function todosLoader2(): Promise<{ todos: Task[] }> {
-  const todos = await fetchTodos();
-
-  return { todos };
 }

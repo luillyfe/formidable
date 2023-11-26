@@ -1,14 +1,14 @@
 import { ReactNode } from "react";
-import { Link } from "react-router-dom";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { Link, useLoaderData } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 
 import { deleteDocument } from "../../Store/actions";
-import { todosQuery } from "./loader";
 
 import Todo from "../Todo";
+import { Task } from "../../Store/types";
 
 export default function ListTodos() {
-  const { isError, isPending, data: todos, error } = useQuery(todosQuery());
+  const { todos } = useLoaderData() as { todos: Task[] };
 
   // Get QueryClient from the context
   const queryClient = useQueryClient();
@@ -18,18 +18,6 @@ export default function ListTodos() {
     deleteDocument(todoId).then(() => {
       queryClient.invalidateQueries({ queryKey: ["todos"] });
     });
-  }
-
-  if (isPending) {
-    return (
-      <Layout>
-        <span>Loading todos...</span>
-      </Layout>
-    );
-  }
-
-  if (isError) {
-    return <span>Error: {error.message}</span>;
   }
 
   return (
