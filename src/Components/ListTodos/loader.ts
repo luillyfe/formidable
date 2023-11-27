@@ -3,7 +3,7 @@ import { QueryClient } from "@tanstack/react-query";
 import { fetchTodos } from "../../Store/actions";
 import { Task } from "../../Store/types";
 
-export function todosQuery() {
+function todosQuery() {
   return {
     queryKey: ["todos"],
     queryFn: fetchTodos,
