@@ -1,6 +1,6 @@
 import { ReactNode, createContext, useContext, useState } from "react";
 
-import Menu from "../../assets/bards4.svg?react";
+import Menu from "../../assets/bards4.svg";
 
 const FlyOutContext = createContext({
   open: false,
