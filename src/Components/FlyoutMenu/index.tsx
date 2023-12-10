@@ -1,7 +1,7 @@
 import FlyOut from "./FlyOut";
 
-// import Edit from "../../assets/edit.svg?react";
-// import Delete from "../../assets/delete.svg?react";
+import Edit from "../../assets/edit.svg";
+import Delete from "../../assets/delete.svg";
 import { MouseEvent } from "react";
 
 interface FlyoutMenu {
