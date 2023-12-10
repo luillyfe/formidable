@@ -10,10 +10,6 @@ export interface Task {
   attachments?: string[];
 }
 
-export interface TodoElement extends Task {
-  handleDelete: (todoId: string) => void;
-}
-
 export interface Fields {
   id: { stringValue: string };
   title: { stringValue: string };
