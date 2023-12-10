@@ -24,6 +24,7 @@ function Toggle() {
     <div
       className="mt-1 flex flex-row h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white"
       onClick={() => toggle(!open)}
+      role="menu"
     >
       <Menu className="h-5 w-5" />
     </div>
