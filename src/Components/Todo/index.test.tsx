@@ -1,3 +1,6 @@
+import { ReactNode } from "react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
 import "@testing-library/jest-dom";
 import { BrowserRouter } from "react-router-dom";
 import { render, screen } from "@testing-library/react";
@@ -6,7 +9,26 @@ import { render, screen } from "@testing-library/react";
 
 import Todo from ".";
 
-describe.only("Todo Component", () => {
+jest.mock("../../Store/actions", () => {
+  return {
+    deleteDocument: jest.fn(() => null),
+  };
+});
+
+jest.mock("../FlyoutMenu", () => {
+  function FlyoutMenu() {
+    return (
+      <div>
+        <ul>
+          <li>Edit</li>
+        </ul>
+      </div>
+    );
+  }
+  return FlyoutMenu;
+});
+
+describe("Todo Component", () => {
   test("render a single todo", () => {
     // Arrange
     const props = {
@@ -17,7 +39,16 @@ describe.only("Todo Component", () => {
         console.log(todoId);
       },
     };
-    render(<Todo {...props} />, { wrapper: BrowserRouter });
+
+    function Wrapper({ children }: { children: ReactNode }) {
+      const client = new QueryClient();
+      return (
+        <QueryClientProvider client={client}>
+          <BrowserRouter>{children}</BrowserRouter>
+        </QueryClientProvider>
+      );
+    }
+    render(<Todo {...props} />, { wrapper: Wrapper });
 
     // Assert
     expect(screen.getByRole("link")).toBeInTheDocument();

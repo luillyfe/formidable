@@ -1,8 +1,8 @@
 import { ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
-import { fetchTodos, deleteDocument } from "../../Store/actions";
+import { fetchTodos } from "../../Store/actions";
 
 import Todo from "../Todo";
 
@@ -18,16 +18,6 @@ export default function ListTodos() {
     retry: 3,
     refetchOnWindowFocus: false,
   });
-
-  // Get QueryClient from the context
-  const queryClient = useQueryClient();
-
-  function handleDelete(todoId: string) {
-    // if success, "todos" query below will be invalidated
-    deleteDocument(todoId).then(() => {
-      queryClient.invalidateQueries({ queryKey: ["todos"] });
-    });
-  }
 
   if (isPending) {
     return (
@@ -49,7 +39,6 @@ export default function ListTodos() {
           description={todo.description}
           id={todo.id}
           key={todo.id}
-          handleDelete={handleDelete}
         />
       ))}
     </Layout>
@@ -61,7 +50,7 @@ function Layout({ children }: { children: ReactNode }) {
     <div className="relative">
       <div className="absolute left-1/2 z-10 mt-5 flex w-screen max-w-max -translate-x-1/2 px-4">
         <div className="w-screen max-w-md flex-auto overflow-hidden rounded-3xl bg-white text-sm leading-6 shadow-lg ring-1 ring-gray-900/5">
-          <div className="p-4" role="list">
+          <div className="p-4" id="todo-list">
             {children}
           </div>
         </div>
