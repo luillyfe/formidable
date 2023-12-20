@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { JSXElementConstructor, ReactElement, ReactNode } from "react";
 import { RouterProvider, createMemoryRouter } from "react-router-dom";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 
@@ -8,8 +8,6 @@ import "whatwg-fetch";
 import { render, screen, waitFor } from "@testing-library/react";
 import { Router } from "@remix-run/router";
 import { installGlobals } from "@remix-run/node";
-
-import { fetchTodos } from "../../Store/actions";
 
 import ListTodos from "./index";
 
@@ -50,52 +48,44 @@ jest.mock("../Todo", () => {
   return Todo;
 });
 
-let router: Router,
-  Wrapper: React.JSXElementConstructor<{
-    children: React.ReactElement;
-  }>;
 beforeAll(() => {
   installGlobals();
-
-  // Define routes
-  const routes = [
-    {
-      path: "/",
-      element: <ListTodos />,
-    },
-  ];
-
-  // Create router
-  router = createMemoryRouter(routes, {
-    initialEntries: ["/"],
-    initialIndex: 1,
-  });
-
-  // Define QueryWrapper
-  const client = new QueryClient();
-  Wrapper = ({ children }: { children: ReactNode }) => {
-    return (
-      <QueryClientProvider client={client}>{children}</QueryClientProvider>
-    );
-  };
-
-  return { router, Wrapper };
 });
 
-test("Must render an empty todo list component", async () => {
-  // Arrange
-  const { getByRole } = render(<RouterProvider router={router} />, {
-    wrapper: Wrapper,
-  });
-  await waitFor(() => getByRole("link"));
+describe("No todos", () => {
+  let router: Router,
+    Wrapper: JSXElementConstructor<{ children: ReactElement }>;
+  beforeAll(() => {
+    const routes = [
+      { path: "/", Component: ListTodos, loader: () => ({ todos: [] }) },
+    ];
+    router = createMemoryRouter(routes);
 
-  // Assert
-  expect(screen.getByText(/New/i)).toBeInTheDocument();
-  expect(screen.queryAllByRole("link")).toHaveLength(1);
+    const client = new QueryClient();
+    Wrapper = ({ children }: { children: ReactNode }) => {
+      return (
+        <QueryClientProvider client={client}>{children}</QueryClientProvider>
+      );
+    };
+  });
+
+  test("Must render an empty todo list component", async () => {
+    // Arrange
+    const { getByRole } = render(<RouterProvider router={router} />, {
+      wrapper: Wrapper,
+    });
+    await waitFor(() => getByRole("link"));
+
+    // Assert
+    expect(screen.getByText(/New/i)).toBeInTheDocument();
+    expect(screen.queryAllByRole("link")).toHaveLength(1);
+  });
 });
 
 describe("Rendering todos", () => {
-  beforeEach(() => {
+  let router: Router,
+    Wrapper: JSXElementConstructor<{ children: ReactElement }>;
+  beforeAll(() => {
     const todos = [
       { id: "0", title: "", description: "" },
       { id: "1", title: "", description: "" },
@@ -103,7 +93,25 @@ describe("Rendering todos", () => {
       { id: "3", title: "", description: "" },
       { id: "4", title: "", description: "" },
     ];
-    (fetchTodos as jest.Mock).mockReturnValue(todos);
+
+    const routes = [
+      {
+        path: "/",
+        Component: ListTodos,
+        loader: () => ({ todos }),
+      },
+    ];
+    router = createMemoryRouter(routes, {
+      initialEntries: ["/"],
+      initialIndex: 0,
+    });
+
+    const client = new QueryClient();
+    Wrapper = ({ children }: { children: ReactNode }) => {
+      return (
+        <QueryClientProvider client={client}>{children}</QueryClientProvider>
+      );
+    };
   });
 
   test("Must render all links in the page (Edit, Title and New links)", async () => {

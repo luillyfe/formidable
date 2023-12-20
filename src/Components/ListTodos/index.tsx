@@ -1,35 +1,11 @@
 import { ReactNode } from "react";
-import { Link } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-
-import { fetchTodos } from "../../Store/actions";
+import { Link, useLoaderData } from "react-router-dom";
 
 import Todo from "../Todo";
+import { Task } from "../../Store/types";
 
 export default function ListTodos() {
-  const {
-    isError,
-    isPending,
-    data: todos,
-    error,
-  } = useQuery({
-    queryKey: ["todos"],
-    queryFn: fetchTodos,
-    retry: 3,
-    refetchOnWindowFocus: false,
-  });
-
-  if (isPending) {
-    return (
-      <Layout>
-        <span>Loading todos...</span>
-      </Layout>
-    );
-  }
-
-  if (isError) {
-    return <span>Error: {error.message}</span>;
-  }
+  const { todos } = useLoaderData() as { todos: Task[] };
 
   return (
     <Layout>
